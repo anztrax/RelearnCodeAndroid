@@ -3,7 +3,6 @@ package com.example.andrew.relearncodeandroid;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.andrew.relearncodeandroid.data.CourseInfo;
 import com.example.andrew.relearncodeandroid.data.DataManager;
 import com.example.andrew.relearncodeandroid.data.NoteInfo;
 
@@ -48,8 +46,8 @@ public class NoteListActivity extends AppCompatActivity {
       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(NoteListActivity.this,ContentNote.class);
 
-        NoteInfo note = (NoteInfo)listNoteView.getItemAtPosition(i);
-        intent.putExtra(ContentNote.STRING_NOTE_INFO, note);
+//        NoteInfo note = (NoteInfo)listNoteView.getItemAtPosition(i);
+        intent.putExtra(ContentNote.NOTE_POSITION, i);
         startActivity(intent);
       }
     });

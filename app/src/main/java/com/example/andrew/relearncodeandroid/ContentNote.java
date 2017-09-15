@@ -2,14 +2,10 @@ package com.example.andrew.relearncodeandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
 
 import com.example.andrew.relearncodeandroid.data.CourseInfo;
@@ -19,7 +15,8 @@ import com.example.andrew.relearncodeandroid.data.NoteInfo;
 import java.util.List;
 
 public class ContentNote extends AppCompatActivity {
-  public static final String STRING_NOTE_INFO = "com.example.andrew.relearncodeandroid.NOTE_INFO";
+  public static final String NOTE_POSITION = "com.example.andrew.relearncodeandroid.NOTE_POSITION";
+  public static final int POSITION_NOT_SET = -1;
   private NoteInfo noteInfo;
   private boolean isNewNote;
 
@@ -59,7 +56,10 @@ public class ContentNote extends AppCompatActivity {
 
   private void readDisplayStateValues() {
     Intent intent = getIntent();
-    noteInfo = intent.getParcelableExtra(STRING_NOTE_INFO);
-    isNewNote = (noteInfo == null);
+    int position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
+    isNewNote = (position == POSITION_NOT_SET);
+    if(!isNewNote){
+      noteInfo = DataManager.getInstance().getNotes().get(position);
+    }
   }
 }
