@@ -26,6 +26,9 @@ public class ContentNote extends AppCompatActivity {
   private EditText titleNoteDescription;
   private int notePosition;
   private boolean isCanceling;
+  private String originalNoteCourseId;
+  private String originalNoteTitle;
+  private String originalNoteText;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class ContentNote extends AppCompatActivity {
     spinnerCourses.setAdapter(adapterCourses);
 
     readDisplayStateValues();
+    saveOriginalValues();
 
     titleNoteTitle = (EditText)findViewById(R.id.text_note_title);
     titleNoteDescription = (EditText)findViewById(R.id.text_note_description);
@@ -53,16 +57,34 @@ public class ContentNote extends AppCompatActivity {
     }
   }
 
+  private void saveOriginalValues() {
+    if(isNewNote)
+      return;
+
+    originalNoteCourseId = noteInfo.getCourse().getCourseId();
+    originalNoteTitle = noteInfo.getTitle().toString();
+    originalNoteText = noteInfo.getText().toString();
+  }
+
   @Override
   protected void onPause() {
     super.onPause();
     if(isCanceling) {
       if(isNewNote) {
         DataManager.getInstance().removeNote(notePosition);
+      }else{
+        storePreviousNoteValues();
       }
     }else {
       saveNote();
     }
+  }
+
+  private void storePreviousNoteValues() {
+    CourseInfo course = DataManager.getInstance().getCourse(originalNoteCourseId);
+    noteInfo.setCourse(course);
+    noteInfo.setTitle(originalNoteTitle);
+    noteInfo.setText(originalNoteText);
   }
 
   private void saveNote(){
