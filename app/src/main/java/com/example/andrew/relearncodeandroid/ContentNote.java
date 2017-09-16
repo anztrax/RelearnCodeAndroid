@@ -24,6 +24,8 @@ public class ContentNote extends AppCompatActivity {
   private Spinner spinnerCourses;
   private EditText titleNoteTitle;
   private EditText titleNoteDescription;
+  private int notePosition;
+  private boolean isCanceling;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,24 @@ public class ContentNote extends AppCompatActivity {
     }
   }
 
+  @Override
+  protected void onPause() {
+    super.onPause();
+    if(isCanceling) {
+      if(isNewNote) {
+        DataManager.getInstance().removeNote(notePosition);
+      }
+    }else {
+      saveNote();
+    }
+  }
+
+  private void saveNote(){
+    noteInfo.setCourse((CourseInfo)spinnerCourses.getSelectedItem());
+    noteInfo.setTitle(titleNoteTitle.getText().toString());
+    noteInfo.setText(titleNoteDescription.getText().toString());
+  }
+
   //set the menubar
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,6 +85,9 @@ public class ContentNote extends AppCompatActivity {
     if(id == R.id.action_send_mail){
       sendMail();
       return true;
+    }else if(id == R.id.action_cancel){
+      isCanceling = true;
+      finish(); //exit the activity
     }
     return super.onOptionsItemSelected(item);
   }
@@ -91,11 +114,20 @@ public class ContentNote extends AppCompatActivity {
     titleNoteDescription.setText(noteInfo.getText());
   }
 
+  private void createNewNote(){
+    DataManager dm = DataManager.getInstance();
+    notePosition = dm.createNewNote();
+    noteInfo = dm.getNotes().get(notePosition);
+
+  }
+
   private void readDisplayStateValues() {
     Intent intent = getIntent();
     int position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
     isNewNote = (position == POSITION_NOT_SET);
-    if(!isNewNote){
+    if(isNewNote){
+      createNewNote();
+    }else {
       noteInfo = DataManager.getInstance().getNotes().get(position);
     }
   }
