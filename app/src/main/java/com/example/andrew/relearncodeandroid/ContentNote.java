@@ -18,6 +18,10 @@ import java.util.List;
 
 public class ContentNote extends AppCompatActivity {
   public static final String NOTE_POSITION = "com.example.andrew.relearncodeandroid.NOTE_POSITION";
+  public static final String ORIGINAL_NOTE_COURSE_ID = "com.example.andrew.relearncodeandroid.ORIGINAL_COURSE_ID";
+  public static final String ORIGINAL_NOTE_TITLE = "com.example.andrew.relearncodeandroid.ORIGINAL_NOTE_TITLE";
+  public static final String ORIGINAL_NOTE_TEXT = "com.example.andrew.relearncodeandroid.ORIGINAL_NOTE_TEXT";
+
   public static final int POSITION_NOT_SET = -1;
   private NoteInfo noteInfo;
   private boolean isNewNote;
@@ -47,7 +51,11 @@ public class ContentNote extends AppCompatActivity {
     spinnerCourses.setAdapter(adapterCourses);
 
     readDisplayStateValues();
-    saveOriginalValues();
+    if(savedInstanceState == null) {
+      saveOriginalValues();
+    }else{
+      restoreOriginalValues(savedInstanceState);
+    }
 
     titleNoteTitle = (EditText)findViewById(R.id.text_note_title);
     titleNoteDescription = (EditText)findViewById(R.id.text_note_description);
@@ -55,6 +63,12 @@ public class ContentNote extends AppCompatActivity {
     if(!isNewNote) {
       displayNote(spinnerCourses, titleNoteTitle, titleNoteDescription);
     }
+  }
+
+  private void restoreOriginalValues(Bundle savedInstanceState) {
+    originalNoteCourseId = savedInstanceState.getString(ORIGINAL_NOTE_COURSE_ID);
+    originalNoteTitle = savedInstanceState.getString(ORIGINAL_NOTE_TITLE);
+    originalNoteText = savedInstanceState.getString(ORIGINAL_NOTE_TEXT);
   }
 
   private void saveOriginalValues() {
@@ -152,5 +166,14 @@ public class ContentNote extends AppCompatActivity {
     }else {
       noteInfo = DataManager.getInstance().getNotes().get(position);
     }
+  }
+
+  //on save instance state
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putString(ORIGINAL_NOTE_COURSE_ID, originalNoteCourseId);
+    outState.putString(ORIGINAL_NOTE_TEXT, originalNoteText);
+    outState.putString(ORIGINAL_NOTE_TITLE, originalNoteTitle);
   }
 }
