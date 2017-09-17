@@ -15,7 +15,7 @@
         style="@style/AppSmallText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="0dp"
         android:text="Small Text"/>
 
     <TextView
@@ -70,4 +70,26 @@
         android:layout_marginTop="10dp"
         android:textColor="@color/button_color_selector"
         android:text="Button Two"/>
+
+    <TextView
+        android:id="@+id/txtViewGradient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="50sp"
+        android:text="Gradient"/>
+
+    <TextView
+        android:id="@+id/txtViewShadow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="50sp"
+        android:textColor="#616161"
+        android:shadowColor="#5000"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius="10"
+        android:text="Shadow"/>
+
 </LinearLayout>
